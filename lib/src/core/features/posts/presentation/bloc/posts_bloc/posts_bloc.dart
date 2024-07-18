@@ -23,6 +23,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           case PostsGetAllPosts():
             await _getAllPosts(event, emit);
             break;
+          case PostsUpdatePost():
+            await _updatePost(event, emit);
+            break;
+          case PostsDeletePost():
+            await _deletePost(event, emit);
+            break;
           default:
         }
       },
@@ -76,6 +82,52 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           posts: posts,
         ),
       );
+    } catch (e) {
+      emit(
+        PostsError(
+          errorMessage: e.toString(),
+          posts: state.posts,
+        ),
+      );
+    }
+  }
+
+  Future<void> _updatePost(
+    PostsUpdatePost event,
+    Emitter<PostsState> emit,
+  ) async {
+    emit(
+      PostsLoading(
+        posts: state.posts,
+      ),
+    );
+
+    try {
+      await _postsRepository.updatePost(event.post);
+      add(PostsGetAllPosts());
+    } catch (e) {
+      emit(
+        PostsError(
+          errorMessage: e.toString(),
+          posts: state.posts,
+        ),
+      );
+    }
+  }
+
+  Future<void> _deletePost(
+    PostsDeletePost event,
+    Emitter<PostsState> emit,
+  ) async {
+    emit(
+      PostsLoading(
+        posts: state.posts,
+      ),
+    );
+
+    try {
+      await _postsRepository.deletePost(event.post);
+      add(PostsGetAllPosts());
     } catch (e) {
       emit(
         PostsError(

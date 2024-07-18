@@ -1,4 +1,5 @@
 import 'package:asd/src/core/features/posts/presentation/bloc/posts_bloc/posts_bloc.dart';
+import 'package:asd/src/core/features/posts/presentation/pages/add_post_page.dart';
 import 'package:asd/src/core/features/posts/presentation/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,13 @@ class PostsPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: ElevatedButton(
         onPressed: () {
-          Navigator.of(context).pushNamed('/add-post');
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return const AddOrEditPostPage();
+              },
+            ),
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
@@ -57,9 +64,71 @@ class PostsPage extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     itemCount: state.posts.length,
                     itemBuilder: (context, index) {
-                      return PostWidget(
-                        title: state.posts[index].title,
-                        description: state.posts[index].description,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return AddOrEditPostPage(
+                                  post: state.posts[index],
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Are you sure you want to delete post?',
+                                ),
+                                actionsAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                actions: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                      context.read<PostsBloc>().add(
+                                            PostsDeletePost(
+                                              post: state.posts[index],
+                                            ),
+                                          );
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: PostWidget(
+                          title: state.posts[index].title,
+                          description: state.posts[index].description,
+                        ),
                       );
                     },
                   ),

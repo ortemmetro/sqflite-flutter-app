@@ -1,17 +1,32 @@
+import 'package:asd/src/core/features/posts/domain/entities/post_model.dart';
 import 'package:asd/src/core/features/posts/presentation/bloc/posts_bloc/posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddPostPage extends StatefulWidget {
-  const AddPostPage({super.key});
+class AddOrEditPostPage extends StatefulWidget {
+  final Post? post;
+
+  const AddOrEditPostPage({
+    super.key,
+    this.post,
+  });
 
   @override
-  State<AddPostPage> createState() => _AddPostPageState();
+  State<AddOrEditPostPage> createState() => _AddOrEditPostPageState();
 }
 
-class _AddPostPageState extends State<AddPostPage> {
+class _AddOrEditPostPageState extends State<AddOrEditPostPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.post != null) {
+      _titleController.text = widget.post!.title;
+      _descriptionController.text = widget.post!.description;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -24,9 +39,9 @@ class _AddPostPageState extends State<AddPostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Add post',
-          style: TextStyle(
+        title: Text(
+          widget.post == null ? 'Add post' : 'Edit post',
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -68,22 +83,34 @@ class _AddPostPageState extends State<AddPostPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<PostsBloc>().add(
-                        PostsAddPost(
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        ),
-                      );
+                  if (widget.post != null) {
+                    context.read<PostsBloc>().add(
+                          PostsUpdatePost(
+                            post: Post(
+                              id: widget.post?.id,
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                            ),
+                          ),
+                        );
+                  } else {
+                    context.read<PostsBloc>().add(
+                          PostsAddPost(
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                          ),
+                        );
+                  }
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Add post',
-                    style: TextStyle(
+                    widget.post == null ? 'Add post' : 'Edit post',
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),

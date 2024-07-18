@@ -12,8 +12,20 @@ class PostsAddPost extends PostsEvent {
   });
 }
 
-class PostsDeletePost extends PostsEvent {}
+class PostsDeletePost extends PostsEvent {
+  final Post post;
 
-class PostsUpdatePost extends PostsEvent {}
+  PostsDeletePost({
+    required this.post,
+  });
+}
+
+class PostsUpdatePost extends PostsEvent {
+  final Post post;
+
+  PostsUpdatePost({
+    required this.post,
+  });
+}
 
 class PostsGetAllPosts extends PostsEvent {}

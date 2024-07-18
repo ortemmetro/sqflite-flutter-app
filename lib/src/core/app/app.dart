@@ -1,7 +1,6 @@
 import 'package:asd/src/core/di/dependency_injection.dart';
 import 'package:asd/src/core/di/get_it_provider.dart';
 import 'package:asd/src/core/features/posts/presentation/bloc/posts_bloc/posts_bloc.dart';
-import 'package:asd/src/core/features/posts/presentation/pages/add_post_page.dart';
 import 'package:asd/src/core/features/posts/presentation/pages/posts_page.dart';
 import 'package:asd/src/core/utils/context_ext.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +23,15 @@ class App extends StatelessWidget {
           create: (context) => context.get<PostsBloc>(),
         ),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const PostsPage(),
-          '/add-post': (context) => const AddPostPage(),
-        },
+        // initialRoute: '/',
+        // routes: {
+        //   '/': (context) => const PostsPage(),
+        //   '/add-post': (context) => const AddOrEditPostPage(),
+        //   '/edit-post': (context) => const AddOrEditPostPage(),
+        // },
+        home: PostsPage(),
       ),
     );
   }
