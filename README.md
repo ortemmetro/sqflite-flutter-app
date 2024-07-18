@@ -1,16 +1,9 @@
-# asd
+# Flutter SqfLite example app
 
-A new Flutter project.
+Here I'm showing example app with [sqflite](https://pub.dev/packages/sqflite). Sqflite is local sql database for flutter projects.
 
-## Getting Started
+## Visualisation
+Here is the video with features, such as read, create, delete, update
 
-This project is a starting point for a Flutter application.
+https://github.com/user-attachments/assets/9cdcf601-f09b-4dd8-a3bf-09182318e55d
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
